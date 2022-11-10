@@ -1,0 +1,174 @@
+﻿@using Microsoft.AspNet.Identity
+@model Hotel_Reservation_System.Models.Room_Usage
+
+@*@{
+            Layout = null;
+    }*@
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@*<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Create</title>
+    </head>
+    <body>*@
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Room_Usage</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Room Type", htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                <select name="Type" id="Type" class="form-control dropdown" onchange="LoadRoomByType()">
+                    <option value="" disabled selected>Select</option>
+                    @foreach (var item in Model.Types)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Room", htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                <select name="Room_Id" id="Room_Id" class="form-control dropdown" required>
+                    <option value="" disabled selected>Select</option>
+                    @*<option value="First Class">First Class</option>*@
+                    @foreach (var item in Model.Room)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Room_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.Label("Guest", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    <select name="Guest_Id" id="Guest_Id" class="form-control dropdown">
+                        <option value="" disabled selected>Select</option>
+                        @foreach (var item in Model.Guests)
+                        {
+                            <option value="@item.Id">@item.UserName</option>
+                        }
+                    </select>
+                    @*@Html.EditorFor(model =>model.Guest_Id,new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.ValidationMessageFor(model => model.Guest_Id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.Label("Guest", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    <select name="Guest_Id" id="Guest_Id" class="form-control dropdown">
+                        <option value="@User.Identity.GetUserId()" selected>@User.Identity.GetUserName()</option>
+                        @*@foreach (var item in Model.Guests)
+                            {
+                                <option value="@item.Id">@item.UserName</option>
+                            }*@
+                    </select>
+                    @*@Html.EditorFor(model =>model.Guest_Id,new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.ValidationMessageFor(model => model.Guest_Id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Usage Hours", htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                <input type="number" name="Hours" min="0" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Hours, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Checkin Date and Time", htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                <input type="datetime" name="Checkin" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Checkin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        var spinner = document.getElementById("spinner");
+        var Select_Room = document.getElementById("Room_Id");
+        var Select_Type = document.getElementById("Type");
+
+        function LoadRoomByType() {
+            spinner.className = "fa fa-spinner fa-spin";
+            for (var i = 0; i < Select_Room.length; i++) {
+                Select_Room.remove(i);
+            }
+            Select_Room.innerHTML = "<option value='' disabled selected>Select</option>";
+
+            var formdata = {
+                "Type": Select_Type.value
+            };
+            //alert(Type.value);
+            if (Select_Type.value != null)
+                $.post("/Room_Usage/Rooms",
+                    formdata,
+                    function (data, status) {
+                        if (status == "success") {
+                            for (var i = 0; i < data.Rooms.length; i++) {
+                                let room = data.Rooms[i];
+                                //alert(room);
+                                Select_Room.innerHTML +=
+                                    "<option value='" + room.Id + "'>" + room.Name + "</option>";
+                            }
+                        } else {
+                            alert(status);
+                        }
+                        spinner.className = "fa fa-spinner fa-spin hidden";
+                    });
+        }
+    </script>
+}
+@*</body>
+    </html>*@

@@ -1,0 +1,112 @@
+﻿@model Hotel_Reservation_System.Models.RegisterViewModel
+@*@{
+    Layout = null;
+}*@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My App Register</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/cssStyled")
+    @Scripts.Render("~/bundles/modernizr")
+    <meta name="keywords" content="My App Sign up page" />
+
+</head>
+<body class="container body-content styled-bg">
+    <div class="col-md-12 main">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 pricing-grid1" style="min-height:18em">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group"></div>
+                <h4>Create a new account.</h4>
+                <hr />
+                if (Model == null)
+                {
+                    <div class="col-md-12">
+                        <input type="text" autocomplete="on" autofocus name="Email"
+                               placeholder="Email" class="form-control center-block"
+                               required />
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-12">
+                        <input type="text" name="Email" value="@Model.Email" placeholder="Email" class="form-control center-block" required />
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                }
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="password" name="Password" placeholder="Password" class="form-control center-block" required />
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="password" name="ConfirmPassword" placeholder="Confirm Password" class="form-control center-block" required />
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="text" name="Names" placeholder="Enter Name" class="form-control center-block" required />
+                    @Html.ValidationMessageFor(m => m.Names, "", new { @class = "text-danger" })
+                </div>
+            
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="text" name="Address" placeholder="Enter Address" class="form-control center-block" required />
+                </div>
+
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="text" name="PhoneNumber" placeholder="Enter PhoneNumber" class="form-control center-block" required />
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="date" name="dob" placeholder="Enter D.O.B" class="form-control center-block" required />
+                    -@*@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })*@                </div>
+
+                <div class="form-group"></div>
+                <div class="col-md-12">
+                    <input type="submit" class="btn-fancy btn-default form-control center-block" value="Register" />
+                </div>
+            }
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    @section scripts{
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script type="text/javascript">
+            //< !--script for close-- >
+
+            $(document).ready(function (c) {
+                $('.close').on('click', function (c) {
+                    $('.super-grid').fadeOut('slow', function (c) {
+                        $('.super-grid').remove();
+                    });
+                });
+            });
+
+            $(document).ready(function (c) {
+                $('.close1').on('click', function (c) {
+                    $('.super-grid1').fadeOut('slow', function (c) {
+                        $('.super-grid1').remove();
+                    });
+                });
+            });
+        </script>
+    }
+</body>
+
+</html>

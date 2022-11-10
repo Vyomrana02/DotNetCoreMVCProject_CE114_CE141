@@ -1,0 +1,90 @@
+﻿@model Hotel_Reservation_System.Models.LoginViewModel
+
+@{
+    //Layout = null;
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My App Login</title>
+    @Styles.Render("~/Content/css") 
+    @Styles.Render("~/Content/cssStyled")
+    @Scripts.Render("~/bundles/modernizr")
+    <meta name="keywords" content="My App login page" />
+
+</head>
+@section scripts{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+<div class="row">
+    <section id="loginForm">
+        <div class="col-md-12 main">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 pricing-grid1 text-center" style="min-height:18em">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group"></div>
+                    <h4>
+                        Login to Your Account.
+                    </h4>
+                    <hr />
+                    <div class="col-md-12 text-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                    if (Model == null)
+                    {
+                        <div class="col-md-12 center-block">
+                            <span class="fa fa-user float-lt" style="padding:1em;"></span>
+                            <input type="text" autocomplete="on" autofocus name="Email"
+                                   placeholder="Email" class="form-control center-block col-md-4"
+                                   required />
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                    else
+                    {
+
+                        <div class="col-md-12 center-block">
+                            <span class="fa fa-user float-lt" style="padding:1em;"></span>
+                            <input type="text" autocomplete="on" autofocus name="Email" value="@Model.Email"
+                                   placeholder="Email" class="form-control center-block col-md-4"
+                                   required />
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                    <div class="form-group"></div>
+                    <div class="col-md-12 center-block">
+                        <span class="fa fa-key float-lt"
+                              style="padding-top:1em; padding-left:1em; padding-right:0.8em"></span>
+                        <input type="password" name="Password" placeholder="Password"
+                               class="form-control center-block col-md-4" required />
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group"></div>
+                    <div class="col-md-12">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                    <div class="form-group"></div>
+                    <div class="col-md-12">
+                        <button type="submit" style="max-width:20em"
+                                class="btn-default form-control btn-success center-block">
+                            <span class="fa fa-sign-in"
+                                  style="padding-right:1em"></span>
+                            Log in
+                        </button>
+                    </div>
+                    <p>@Html.ActionLink("Create New Account?", "Register")</p>
+                }
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </section>
+</div>
